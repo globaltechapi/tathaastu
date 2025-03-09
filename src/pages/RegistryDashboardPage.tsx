@@ -18,8 +18,10 @@ import {
   getRegistryById,
   getRegistryItems,
   getRegistryStats,
+  getRegistryReservations,
 } from "@/services/registryService";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 
 export default function RegistryDashboardPage() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +30,7 @@ export default function RegistryDashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [registry, setRegistry] = useState(null);
   const [items, setItems] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [stats, setStats] = useState({
     totalItems: 0,
     itemsPurchased: 0,
@@ -37,6 +40,8 @@ export default function RegistryDashboardPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("Reservations:", reservations);
+
     const fetchRegistryData = async () => {
       if (!id) return;
 
@@ -85,6 +90,112 @@ export default function RegistryDashboardPage() {
             views: 0,
           });
         }
+
+        // Fetch reservations - CRITICAL SECTION
+        try {
+          console.log("Fetching reservations for registry ID:", id);
+
+          // Direct query first to ensure we get the most up-to-date data
+          try {
+            const { data: directItems, error: directError } = await supabase
+              .from("registry_items")
+              .select(
+                "id, name, purchased, purchased_at, purchaser_name, purchaser_email",
+              )
+              .eq("registry_id", id)
+              .eq("purchased", true);
+
+            console.log("Direct query results:", directItems);
+
+            if (directItems && directItems.length > 0 && !directError) {
+              const formattedItems = directItems.map((item) => ({
+                id: item.id,
+                item_name: item.name,
+                purchased_at: item.purchased_at || new Date().toISOString(),
+                purchaser_name: item.purchaser_name || "Guest",
+                purchaser_email: item.purchaser_email || "guest@example.com",
+              }));
+              console.log(
+                "Setting reservations from direct query:",
+                formattedItems,
+              );
+              setReservations(formattedItems);
+            }
+          } catch (directError) {
+            console.error("Error in direct query:", directError);
+          }
+
+          // Check localStorage for any reserved items
+          try {
+            const reservedItems = JSON.parse(
+              localStorage.getItem("reservedItems") || "{}",
+            );
+
+            if (Object.keys(reservedItems).length > 0) {
+              console.log(
+                "Found reserved items in localStorage:",
+                reservedItems,
+              );
+
+              // Get all registry items to match with localStorage
+              const { data: registryItems } = await supabase
+                .from("registry_items")
+                .select("id, name")
+                .eq("registry_id", id);
+
+              if (registryItems) {
+                const localReservations = [];
+                for (const item of registryItems) {
+                  if (reservedItems[item.id]) {
+                    localReservations.push({
+                      id: item.id,
+                      item_name: item.name,
+                      purchased_at:
+                        reservedItems[item.id].timestamp ||
+                        new Date().toISOString(),
+                      purchaser_name:
+                        reservedItems[item.id].purchaser_name || "Guest",
+                      purchaser_email:
+                        reservedItems[item.id].purchaser_email ||
+                        "guest@example.com",
+                    });
+                  }
+                }
+
+                if (localReservations.length > 0) {
+                  console.log(
+                    "Setting reservations from localStorage:",
+                    localReservations,
+                  );
+                  setReservations((prev) => {
+                    // Combine with existing reservations, avoiding duplicates
+                    const existingIds = prev.map((r) => r.id);
+                    const newItems = localReservations.filter(
+                      (r) => !existingIds.includes(r.id),
+                    );
+                    return [...prev, ...newItems];
+                  });
+                }
+              }
+            }
+          } catch (localStorageError) {
+            console.error(
+              "Error reading from localStorage:",
+              localStorageError,
+            );
+          }
+
+          // Also try the service function
+          const reservationsData = await getRegistryReservations(id);
+          if (reservationsData && reservationsData.length > 0) {
+            console.log("Setting reservations from service:", reservationsData);
+            setReservations(reservationsData);
+          }
+        } catch (reservationsError) {
+          console.error("Error fetching reservations:", reservationsError);
+          // Set empty array instead of mock data
+          setReservations([]);
+        }
       } catch (err) {
         console.error("Error fetching registry data:", err);
         setError("Failed to load registry data");
@@ -94,7 +205,30 @@ export default function RegistryDashboardPage() {
     };
 
     fetchRegistryData();
-  }, [id, user?.id, items.length]);
+
+    // Set up polling to refresh data every 10 seconds
+    const pollingInterval = setInterval(async () => {
+      if (!id) return;
+
+      try {
+        // Refresh items to check for new purchases
+        const refreshedItems = await getRegistryItems(id);
+        setItems(refreshedItems);
+
+        // Refresh reservations
+        const refreshedReservations = await getRegistryReservations(id);
+        setReservations(refreshedReservations);
+
+        // Refresh stats
+        const refreshedStats = await getRegistryStats(id);
+        setStats(refreshedStats);
+      } catch (error) {
+        console.error("Error refreshing data:", error);
+      }
+    }, 10000); // Poll every 10 seconds
+
+    return () => clearInterval(pollingInterval);
+  }, [id, user?.id]);
 
   // Fallback to mock data if no registry data is available yet
   const registryData = registry || {
@@ -171,15 +305,9 @@ export default function RegistryDashboardPage() {
           </Button>
           <div className="flex gap-2">
             <Button size="sm" asChild>
-              <Link to={`/registry/${registryData.id}/add-item`}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Amazon Item
-              </Link>
-            </Button>
-            <Button size="sm" variant="outline" asChild>
               <Link to={`/registry/${registryData.id}/add-manual-item`}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Manual Item
+                Add Item
               </Link>
             </Button>
           </div>
@@ -351,15 +479,9 @@ export default function RegistryDashboardPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild>
-                  <Link to={`/registry/${registryData.id}/add-item`}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Amazon Item
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
                   <Link to={`/registry/${registryData.id}/add-manual-item`}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Manual Item
+                    Add Item
                   </Link>
                 </Button>
               </div>
@@ -370,15 +492,9 @@ export default function RegistryDashboardPage() {
             <div className="mt-8 text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild>
-                  <Link to={`/registry/${registryData.id}/add-item`}>
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Add Amazon Item
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
                   <Link to={`/registry/${registryData.id}/add-manual-item`}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Manual Item
+                    Add Item
                   </Link>
                 </Button>
               </div>
@@ -395,21 +511,29 @@ export default function RegistryDashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {stats.itemsPurchased > 0 ? (
+              {reservations.length > 0 ? (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-3 rounded-lg border">
-                    <div className="bg-primary/10 p-2 rounded-full">
-                      <ShoppingCart className="h-5 w-5 text-primary" />
+                  {reservations.map((reservation) => (
+                    <div
+                      key={reservation.id}
+                      className="flex items-center gap-4 p-3 rounded-lg border"
+                    >
+                      <div className="bg-primary/10 p-2 rounded-full">
+                        <ShoppingCart className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium">
+                          {reservation.purchaser_name || "Guest"} reserved{" "}
+                          {reservation.item_name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {new Date(
+                            reservation.purchased_at || new Date(),
+                          ).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">
-                        {stats.itemsPurchased}{" "}
-                        {stats.itemsPurchased === 1 ? "item" : "items"}{" "}
-                        purchased
-                      </p>
-                      <p className="text-sm text-muted-foreground">Recently</p>
-                    </div>
-                  </div>
+                  ))}
 
                   <div className="flex items-center gap-4 p-3 rounded-lg border">
                     <div className="bg-primary/10 p-2 rounded-full">

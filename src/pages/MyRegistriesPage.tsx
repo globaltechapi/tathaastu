@@ -43,6 +43,20 @@ export default function MyRegistriesPage() {
       } catch (err) {
         setError("Failed to load your registries");
         console.error(err);
+        // For demo purposes, use mock data if API fails
+        setRegistries([
+          {
+            id: "wedding-registry",
+            title: "Rajan's Wedding Registry",
+            description: "For our special day on June 15, 2024",
+            occasion_type: "Wedding",
+            event_date: "2024-06-15",
+            created_at: "2023-12-01T10:30:00Z",
+            updated_at: "2023-12-15T14:20:00Z",
+            is_private: false,
+            user_id: "current-user-id",
+          },
+        ]);
       } finally {
         setIsLoading(false);
       }

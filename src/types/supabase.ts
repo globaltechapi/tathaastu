@@ -174,6 +174,8 @@ export type Database = {
           purchased: boolean | null
           purchased_at: string | null
           purchased_by: string | null
+          purchaser_email: string | null
+          purchaser_name: string | null
           quantity: number
           registry_id: string
           variant: string | null
@@ -191,6 +193,8 @@ export type Database = {
           purchased?: boolean | null
           purchased_at?: string | null
           purchased_by?: string | null
+          purchaser_email?: string | null
+          purchaser_name?: string | null
           quantity?: number
           registry_id: string
           variant?: string | null
@@ -208,6 +212,8 @@ export type Database = {
           purchased?: boolean | null
           purchased_at?: string | null
           purchased_by?: string | null
+          purchaser_email?: string | null
+          purchaser_name?: string | null
           quantity?: number
           registry_id?: string
           variant?: string | null
@@ -288,7 +294,54 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      registry_activity: {
+        Row: {
+          activity_type: string | null
+          id: string | null
+          item_name: string | null
+          purchased_at: string | null
+          purchased_by: string | null
+          purchaser_email: string | null
+          purchaser_name: string | null
+          registry_id: string | null
+        }
+        Insert: {
+          activity_type?: never
+          id?: string | null
+          item_name?: string | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          purchaser_email?: string | null
+          purchaser_name?: string | null
+          registry_id?: string | null
+        }
+        Update: {
+          activity_type?: never
+          id?: string | null
+          item_name?: string | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          purchaser_email?: string | null
+          purchaser_name?: string | null
+          registry_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registry_items_purchased_by_fkey"
+            columns: ["purchased_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "registry_items_registry_id_fkey"
+            columns: ["registry_id"]
+            isOneToOne: false
+            referencedRelation: "registries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

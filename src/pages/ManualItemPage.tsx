@@ -15,7 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { createRegistryItem } from "@/services/registryService";
+// Import the dedicated service for manual item addition
+import { addManualItem } from "@/services/manualItemService";
 import {
   Select,
   SelectContent,
@@ -104,8 +105,8 @@ export default function ManualItemPage() {
         productImage ||
         `https://placehold.co/400x400/e2e8f0/64748b?text=${encodeURIComponent(productName)}`;
 
-      // Create item in database
-      await createRegistryItem({
+      // Use the dedicated service function to add the item
+      const { error: insertError } = await addManualItem({
         registry_id: registryId || "new-registry",
         name: productName,
         price: parseFloat(productPrice),
@@ -114,9 +115,15 @@ export default function ManualItemPage() {
         note: note || null,
         quantity,
         platform,
-        product_link: productLink,
-        variant: productVariant,
+        product_link: productLink || null,
+        variant: productVariant || null,
+        purchased: false,
       });
+
+      if (insertError) {
+        console.error("Insert error:", insertError);
+        throw insertError;
+      }
 
       // Show success message
       toast({

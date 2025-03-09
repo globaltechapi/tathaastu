@@ -24,7 +24,7 @@ import { Search } from "lucide-react";
 const registries = [
   {
     id: "wedding-sample",
-    title: "Sarah & Michael's Wedding",
+    title: "Rajan's Wedding",
     date: "June 15, 2024",
     image:
       "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80",

@@ -1,11 +1,10 @@
 import { Suspense } from "react";
-import { useRoutes, Routes, Route } from "react-router-dom";
-import routes from "tempo-routes";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import CreateRegistryPage from "./pages/CreateRegistryPage";
 import RegistryDashboardPage from "./pages/RegistryDashboardPage";
-import AddItemPage from "./pages/AddItemPage";
+
 import ManualItemPage from "./pages/ManualItemPage";
 import ViewRegistryPage from "./pages/ViewRegistryPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
@@ -63,14 +62,7 @@ function App() {
                   </AuthGuard>
                 }
               />
-              <Route
-                path="/registry/:id/add-item"
-                element={
-                  <AuthGuard>
-                    <AddItemPage />
-                  </AuthGuard>
-                }
-              />
+
               <Route
                 path="/registry/:id/add-manual-item"
                 element={
@@ -118,9 +110,10 @@ function App() {
                   </BrandAmbassadorGuard>
                 }
               />
+
+              {/* Tempo routes will be handled separately */}
             </Route>
           </Routes>
-          {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
           <Toaster />
         </>
       </Suspense>

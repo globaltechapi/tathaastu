@@ -5,25 +5,33 @@ export type Invitation = {
   registry_id: string;
   email: string;
   name: string | null;
+  message: string | null;
   status: "pending" | "sent" | "viewed";
   rsvp_status: "attending" | "not_attending" | "maybe" | null;
-  message: string | null;
+  token: string | null;
+  design_data: string | null;
   created_at: string;
-  updated_at: string;
-  token: string;
+  updated_at: string | null;
 };
 
 export type CreateInvitationData = {
   registry_id: string;
   email: string;
   name?: string;
-  message?: string;
+  message?: string | null;
+  design_data?: string | null;
 };
 
 export async function createInvitation(data: CreateInvitationData) {
   const { data: invitation, error } = await supabase
     .from("invitations")
-    .insert([data])
+    .insert([
+      {
+        ...data,
+        status: "pending",
+        token: generateToken(),
+      },
+    ])
     .select()
     .single();
 
@@ -34,9 +42,15 @@ export async function createInvitation(data: CreateInvitationData) {
 export async function createBulkInvitations(
   invitations: CreateInvitationData[],
 ) {
+  const invitationsWithTokens = invitations.map((invitation) => ({
+    ...invitation,
+    status: "pending",
+    token: generateToken(),
+  }));
+
   const { data, error } = await supabase
     .from("invitations")
-    .insert(invitations)
+    .insert(invitationsWithTokens)
     .select();
 
   if (error) throw error;
@@ -104,4 +118,12 @@ export async function deleteInvitation(id: string) {
 
   if (error) throw error;
   return true;
+}
+
+// Helper function to generate a random token
+function generateToken(): string {
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
 }

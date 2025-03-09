@@ -15,6 +15,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Gift, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 
 export default function SignInForm() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function SignInForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(location.state?.userType || "user");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,18 +83,32 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-6 py-12">
+    <div className="mx-auto max-w-md space-y-6 py-12 relative">
+      {/* Decorative elements */}
+      <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/30 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/30 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-40 left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl -z-10"></div>
+
       <div className="text-center">
-        <h1 className="text-3xl font-bold">Welcome to Tathaastu</h1>
+        <div className="flex justify-center mb-4">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg">
+            <Gift className="h-10 w-10" />
+          </div>
+        </div>
+        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+          Welcome to Tathaastu
+        </h1>
         <p className="text-muted-foreground mt-2">
           Sign in to your account to continue
         </p>
       </div>
 
-      <Card>
+      <Card className="border-0 shadow-xl bg-white/95 backdrop-blur-sm">
         <form onSubmit={handleSubmit}>
-          <CardHeader>
-            <CardTitle>Sign In</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
+              Sign In
+            </CardTitle>
             <CardDescription>
               Enter your email and password to access your account
             </CardDescription>
@@ -104,54 +120,116 @@ export default function SignInForm() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="userType">Login As</Label>
-              <select
-                id="userType"
-                value={userType}
-                onChange={(e) => setUserType(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="user">Regular User</option>
-                <option value="ambassador">Brand Ambassador</option>
-              </select>
+              <Label htmlFor="userType" className="font-medium text-gray-700">
+                Login As
+              </Label>
+              <div className="relative">
+                <select
+                  id="userType"
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
+                  className="flex h-12 w-full rounded-lg border border-blue-200 bg-white px-4 py-3 text-sm shadow-sm transition-all hover:border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus-visible:outline-none"
+                >
+                  <option value="user">Regular User</option>
+                  <option value="ambassador">Brand Ambassador</option>
+                </select>
+                <User className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Label htmlFor="email" className="font-medium text-gray-700">
+                Email
+              </Label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="pl-10 h-12 border-blue-200 rounded-lg shadow-sm transition-all hover:border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                />
+                <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+              </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="font-medium text-gray-700">
+                  Password
+                </Label>
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
                 >
                   Forgot password?
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="pl-10 pr-10 h-12 border-blue-200 rounded-lg shadow-sm transition-all hover:border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                />
+                <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign In"}
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 shadow-md hover:shadow-lg transition-all"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </span>
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <div className="text-center text-sm">
               Don't have an account?{" "}
-              <Link to="/register" className="text-primary hover:underline">
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
+              >
                 Sign up
               </Link>
             </div>
