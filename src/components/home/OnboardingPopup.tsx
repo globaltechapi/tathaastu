@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, HelpCircle, Info } from "lucide-react";
+import { X, HelpCircle, Info, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -26,8 +26,14 @@ const steps: Step[] = [
   {
     title: "Create Your Registry",
     description:
-      "Click on 'Create Registry' and select your registry type (personal celebration, orphanage, elderly home, or NGO). Add a title, description, and event date if applicable. Then start adding items - you can search for products on Amazon directly through our platform or add items manually with custom details, prices, and priority levels.",
+      "Click on 'Create Registry' and select your registry type (personal celebration, orphanage, elderly home, or NGO). Add a title, description, and event date if applicable. Then start adding items - you can add items manually with custom details, prices, and priority levels.",
     icon: "📋",
+  },
+  {
+    title: "Design Invitations",
+    description:
+      "Create beautiful custom invitations to share with your registry. Choose from a variety of templates, customize colors, fonts, and add your own message. These personalized invitations make sharing your registry more special and engaging for your guests.",
+    icon: "🎨",
   },
   {
     title: "Share with Friends",

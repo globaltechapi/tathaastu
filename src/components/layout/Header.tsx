@@ -48,9 +48,8 @@ export default function Header() {
         <nav className="flex items-center gap-6">
           <Link
             to="/"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Home className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Home
             </span>
@@ -59,9 +58,8 @@ export default function Header() {
 
           <Link
             to="/explore"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Compass className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Explore
             </span>
@@ -70,9 +68,8 @@ export default function Header() {
 
           <Link
             to="/how-it-works"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Gift className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               How It Works
             </span>
@@ -81,9 +78,8 @@ export default function Header() {
 
           <Link
             to="/about"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Info className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               About Us
             </span>
@@ -92,9 +88,8 @@ export default function Header() {
 
           <Link
             to="/contact"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Phone className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Contact
             </span>
@@ -103,9 +98,8 @@ export default function Header() {
 
           <Link
             to="/brand-ambassador"
-            className="group flex items-center gap-1 text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
           >
-            <Award className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Brand Ambassador
             </span>

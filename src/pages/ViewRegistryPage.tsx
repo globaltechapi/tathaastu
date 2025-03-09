@@ -145,8 +145,23 @@ export default function ViewRegistryPage() {
     }
 
     setIsReserving(true);
+    let invoiceUrl = null;
 
     try {
+      // Handle invoice upload if provided
+      const invoiceInput = document.getElementById(
+        "invoice",
+      ) as HTMLInputElement;
+      if (invoiceInput?.files?.length) {
+        const file = invoiceInput.files[0];
+        // In a real app, you would upload this to storage and get a URL
+        // For demo purposes, we'll create a data URL
+        invoiceUrl = URL.createObjectURL(file);
+        // Alternatively for a real implementation with Supabase storage:
+        // const { data, error } = await supabase.storage.from('invoices').upload(`${selectedItem.id}/${file.name}`, file);
+        // if (!error) invoiceUrl = supabase.storage.from('invoices').getPublicUrl(data.path).data.publicUrl;
+      }
+
       // Approach 1: Store in localStorage first for immediate feedback
       const reservedItems = JSON.parse(
         localStorage.getItem("reservedItems") || "{}",
@@ -159,6 +174,7 @@ export default function ViewRegistryPage() {
         purchaser_name: purchaserName,
         purchaser_email: purchaserEmail,
         timestamp: timestamp,
+        invoice_url: invoiceUrl,
       };
       localStorage.setItem("reservedItems", JSON.stringify(reservedItems));
 
@@ -173,6 +189,7 @@ export default function ViewRegistryPage() {
                 purchaser_name: purchaserName,
                 purchaser_email: purchaserEmail,
                 purchaser_message: purchaserMessage,
+                invoice_url: invoiceUrl,
               }
             : item,
         ),
@@ -202,6 +219,7 @@ export default function ViewRegistryPage() {
             purchaser_name: purchaserName,
             purchaser_email: purchaserEmail,
             purchaser_message: purchaserMessage,
+            invoice_url: invoiceUrl,
           })
           .eq("id", selectedItem.id),
       );
@@ -218,6 +236,7 @@ export default function ViewRegistryPage() {
             purchaserName,
             purchaserEmail,
             purchaserMessage,
+            invoiceUrl,
           ),
         );
       } catch (serviceError) {
@@ -462,6 +481,20 @@ export default function ViewRegistryPage() {
                 value={purchaserMessage}
                 onChange={(e) => setPurchaserMessage(e.target.value)}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="invoice">Purchase Invoice (Optional)</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="invoice"
+                  type="file"
+                  accept="image/*,.pdf"
+                  className="cursor-pointer"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Upload a receipt or invoice as proof of purchase (PDF or image)
+              </p>
             </div>
           </div>
 

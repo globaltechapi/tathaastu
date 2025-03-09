@@ -26,6 +26,7 @@ export type RegistryItem = {
   purchased_by: string | null;
   purchased_at: string | null;
   created_at: string;
+  invoice_url?: string | null;
 };
 
 export type RegistryView = {
@@ -215,6 +216,7 @@ export async function markItemAsPurchasedWithDetails(
   purchaserName: string,
   purchaserEmail: string,
   purchaserMessage?: string,
+  invoiceUrl?: string | null,
 ) {
   try {
     // Get the registry_id first to use in our cache invalidation
@@ -273,6 +275,7 @@ export async function markItemAsPurchasedWithDetails(
         purchaser_name: purchaserName,
         purchaser_email: purchaserEmail,
         purchaser_message: purchaserMessage,
+        invoice_url: invoiceUrl,
         updated_at: timestamp,
       })
       .eq("id", id)
@@ -296,6 +299,7 @@ export async function markItemAsPurchasedWithDetails(
             purchased_at: timestamp,
             purchaser_name: purchaserName,
             purchaser_email: purchaserEmail,
+            invoice_url: invoiceUrl,
             updated_at: new Date().toISOString(), // Use a new timestamp to force update
           })
           .eq("id", id);
@@ -367,7 +371,7 @@ export async function getRegistryReservations(registryId: string) {
     const { data, error } = await supabase
       .from("registry_items")
       .select(
-        "id, registry_id, name as item_name, purchased_at, purchased_by, purchaser_name, purchaser_email, purchased",
+        "id, registry_id, name as item_name, purchased_at, purchased_by, purchaser_name, purchaser_email, purchased, invoice_url",
       )
       .eq("registry_id", registryId)
       .eq("purchased", true)
@@ -397,7 +401,7 @@ export async function getRegistryReservations(registryId: string) {
           const { data: refreshedData } = await supabase
             .from("registry_items")
             .select(
-              "id, registry_id, name as item_name, purchased_at, purchased_by, purchaser_name, purchaser_email",
+              "id, registry_id, name as item_name, purchased_at, purchased_by, purchaser_name, purchaser_email, invoice_url",
             )
             .eq("registry_id", registryId)
             .eq("purchased", true)
@@ -479,6 +483,7 @@ export async function getRegistryReservations(registryId: string) {
                 purchased_by: reservedItems[item.id].purchased_by,
                 purchaser_name: reservedItems[item.id].purchaser_name,
                 purchaser_email: reservedItems[item.id].purchaser_email,
+                invoice_url: reservedItems[item.id].invoice_url || null,
               });
             }
           }

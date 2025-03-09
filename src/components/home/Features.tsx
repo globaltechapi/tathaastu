@@ -1,5 +1,5 @@
 import {
-  ShoppingCart,
+  Palette,
   Share2,
   Gift,
   Calendar,
@@ -24,10 +24,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 const features = [
   {
-    icon: <ShoppingCart className="h-10 w-10 text-primary" />,
-    title: "Amazon Integration",
+    icon: <Palette className="h-10 w-10 text-primary" />,
+    title: "Custom Invitation Design",
     description:
-      "Easily add items from Amazon to your registry with our seamless integration, perfect for organizations with specific needs.",
+      "Create beautiful custom invitations to share with your registry using our designer with templates, colors, and font options.",
     is3D: false,
   },
   {

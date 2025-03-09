@@ -37,7 +37,7 @@ export default function RecentActivity({ registryId }: RecentActivityProps) {
           const { data: directItems, error: directError } = await supabase
             .from("registry_items")
             .select(
-              "id, name, purchased, purchased_at, purchaser_name, purchaser_email",
+              "id, name, purchased, purchased_at, purchaser_name, purchaser_email, invoice_url",
             )
             .eq("registry_id", registryId)
             .eq("purchased", true);
@@ -51,6 +51,7 @@ export default function RecentActivity({ registryId }: RecentActivityProps) {
               purchased_at: item.purchased_at || new Date().toISOString(),
               purchaser_name: item.purchaser_name || "Guest",
               purchaser_email: item.purchaser_email || "guest@example.com",
+              invoice_url: item.invoice_url || null,
             }));
             setReservations(formattedItems);
           }
@@ -93,7 +94,7 @@ export default function RecentActivity({ registryId }: RecentActivityProps) {
         const { data: directItems, error: directError } = await supabase
           .from("registry_items")
           .select(
-            "id, name, purchased, purchased_at, purchaser_name, purchaser_email",
+            "id, name, purchased, purchased_at, purchaser_name, purchaser_email, invoice_url",
           )
           .eq("registry_id", registryId)
           .eq("purchased", true);
@@ -105,6 +106,7 @@ export default function RecentActivity({ registryId }: RecentActivityProps) {
             purchased_at: item.purchased_at || new Date().toISOString(),
             purchaser_name: item.purchaser_name || "Guest",
             purchaser_email: item.purchaser_email || "guest@example.com",
+            invoice_url: item.invoice_url || null,
           }));
           setReservations(formattedItems);
         }
@@ -189,6 +191,33 @@ export default function RecentActivity({ registryId }: RecentActivityProps) {
                   <p className="text-sm text-muted-foreground">
                     {new Date(reservation.purchased_at).toLocaleString()}
                   </p>
+                  {reservation.invoice_url && (
+                    <div className="mt-1">
+                      <a
+                        href={reservation.invoice_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs inline-flex items-center gap-1 text-primary hover:text-primary/80 bg-primary/5 px-2 py-1 rounded-md"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        View Invoice
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
