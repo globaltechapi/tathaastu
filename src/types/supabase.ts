@@ -9,6 +9,63 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      brand_ambassadors: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          joined_date: string | null
+          kit_status: string | null
+          name: string | null
+          payment_id: string | null
+          phone: string | null
+          pincode: string | null
+          state: string | null
+          status: string
+          tshirt_size: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          joined_date?: string | null
+          kit_status?: string | null
+          name?: string | null
+          payment_id?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          status?: string
+          tshirt_size?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          joined_date?: string | null
+          kit_status?: string | null
+          name?: string | null
+          payment_id?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          status?: string
+          tshirt_size?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       invitations: {
         Row: {
           created_at: string | null

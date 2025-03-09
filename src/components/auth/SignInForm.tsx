@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,16 +12,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function SignInForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userType, setUserType] = useState(location.state?.userType || "user");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +32,7 @@ export default function SignInForm() {
     setIsLoading(true);
 
     try {
-      const { error } = await signIn(email, password);
+      const { error, user: authData } = await signIn(email, password);
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
           throw new Error(
@@ -38,7 +41,34 @@ export default function SignInForm() {
         }
         throw error;
       }
-      navigate("/");
+
+      if (userType === "ambassador") {
+        try {
+          const { checkBrandAmbassadorStatus } = await import(
+            "@/lib/brandAmbassador"
+          );
+          // Get the current user from the successful sign-in response
+          const isAmbassador = await checkBrandAmbassadorStatus(
+            authData?.id || "",
+          );
+
+          if (isAmbassador) {
+            navigate("/brand-ambassador/dashboard");
+          } else {
+            navigate("/brand-ambassador", {
+              state: {
+                message:
+                  "You need to enroll in the Brand Ambassador program to access the dashboard.",
+              },
+            });
+          }
+        } catch (error) {
+          console.error("Error checking ambassador status:", error);
+          navigate("/");
+        }
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       setError(
         error instanceof Error
@@ -73,6 +103,18 @@ export default function SignInForm() {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
+            <div className="space-y-2">
+              <Label htmlFor="userType">Login As</Label>
+              <select
+                id="userType"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="user">Regular User</option>
+                <option value="ambassador">Brand Ambassador</option>
+              </select>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input

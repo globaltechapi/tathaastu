@@ -11,6 +11,7 @@ type AuthContextType = {
     password: string,
   ) => Promise<{
     error: Error | null;
+    user: User | null;
   }>;
   signUp: (
     email: string,
@@ -105,18 +106,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      return { error };
+      return { error, user: data?.user };
     } catch (error) {
       return {
         error:
           error instanceof Error
             ? error
             : new Error("An error occurred during sign in"),
+        user: null,
       };
     }
   };

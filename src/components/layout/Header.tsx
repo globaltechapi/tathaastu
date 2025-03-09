@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import {
@@ -9,11 +9,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Gift, Compass, Info, Phone, Home, User } from "lucide-react";
+import {
+  Gift,
+  Compass,
+  Info,
+  Phone,
+  Home,
+  User,
+  Award,
+  BarChart3,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Header() {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut();
@@ -87,6 +97,17 @@ export default function Header() {
             <Phone className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Contact
+            </span>
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
+
+          <Link
+            to="/brand-ambassador"
+            className="group flex items-center gap-1 text-sm font-medium relative overflow-hidden py-2"
+          >
+            <Award className="h-4 w-4 transition-transform group-hover:scale-110" />
+            <span className="relative z-10 group-hover:text-primary transition-colors">
+              Brand Ambassador
             </span>
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
           </Link>

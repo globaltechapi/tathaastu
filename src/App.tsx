@@ -18,8 +18,12 @@ import ViewInvitationPage from "./pages/ViewInvitationPage";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
+import BrandAmbassadorPage from "./pages/BrandAmbassadorPage";
+import BrandAmbassadorDashboard from "./pages/BrandAmbassadorDashboard";
+import BrandAmbassadorLogin from "./pages/BrandAmbassadorLogin";
 import { AuthProvider } from "./lib/auth";
 import AuthGuard from "./components/auth/AuthGuard";
+import BrandAmbassadorGuard from "./components/auth/BrandAmbassadorGuard";
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -97,6 +101,19 @@ function App() {
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/contact" element={<ContactUsPage />} />
+              <Route
+                path="/brand-ambassador"
+                element={<BrandAmbassadorPage />}
+              />
+              {/* Brand Ambassador login now uses the main login page with a dropdown */}
+              <Route
+                path="/brand-ambassador/dashboard"
+                element={
+                  <BrandAmbassadorGuard>
+                    <BrandAmbassadorDashboard />
+                  </BrandAmbassadorGuard>
+                }
+              />
             </Route>
           </Routes>
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
