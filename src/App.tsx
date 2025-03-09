@@ -18,6 +18,8 @@ import ViewInvitationPage from "./pages/ViewInvitationPage";
 import AccountSettingsPage from "./pages/AccountSettingsPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
 import BrandAmbassadorPage from "./pages/BrandAmbassadorPage";
 import BrandAmbassadorDashboard from "./pages/BrandAmbassadorDashboard";
 import BrandAmbassadorLogin from "./pages/BrandAmbassadorLogin";
@@ -101,6 +103,8 @@ function App() {
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/contact" element={<ContactUsPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
               <Route
                 path="/brand-ambassador"
                 element={<BrandAmbassadorPage />}
