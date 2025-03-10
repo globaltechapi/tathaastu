@@ -1,24 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PageHeader from "@/components/layout/PageHeader";
 
 export default function TermsOfServicePage() {
   return (
     <div className="bg-background">
-      <div className="relative h-64 bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
-        <div className="container text-center px-6">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-            Terms of Service
-          </h1>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Terms of Service"
+        description={`Last updated: ${new Date().toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })}`}
+      />
 
       <div className="container mx-auto py-16 px-6">
         <div className="max-w-3xl mx-auto space-y-8">

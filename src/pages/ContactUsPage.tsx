@@ -13,9 +13,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 
 export default function ContactUsPage() {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -43,16 +45,10 @@ export default function ContactUsPage() {
 
   return (
     <div className="bg-background">
-      <div className="relative h-64 bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
-        <div className="container text-center px-6">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-            Contact Us
-          </h1>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Have questions or feedback? We'd love to hear from you.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Contact Us"
+        description="Have questions or feedback? We'd love to hear from you."
+      />
 
       <div className="container mx-auto py-16 px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

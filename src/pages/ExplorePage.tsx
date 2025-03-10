@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 
 // Mock data for sample registries
 const registries = [
@@ -110,17 +111,10 @@ export default function ExplorePage() {
 
   return (
     <div className="bg-background">
-      <div className="relative h-64 bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
-        <div className="container text-center px-6">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-            Explore Registries
-          </h1>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Browse through public registries to get inspired or find a specific
-            registry.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Explore Registries"
+        description="Browse through public registries to get inspired or find a specific registry."
+      />
 
       <div className="container mx-auto py-12 px-6">
         <div className="flex flex-col md:flex-row gap-4 mb-8">

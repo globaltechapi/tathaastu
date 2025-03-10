@@ -1,19 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PageHeader from "@/components/layout/PageHeader";
 
 export default function AboutUsPage() {
   return (
     <div className="bg-background">
-      <div className="relative h-64 bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
-        <div className="container text-center px-6">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-            About Tathaastu
-          </h1>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Our journey, mission, and the team behind the platform
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="About Tathaastu"
+        description="Our journey, mission, and the team behind the platform"
+      />
 
       <div className="container mx-auto py-16 px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">

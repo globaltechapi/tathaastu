@@ -24,7 +24,7 @@ import TermsOfServicePage from "./pages/TermsOfServicePage";
 import BrandAmbassadorPage from "./pages/BrandAmbassadorPage";
 import BrandAmbassadorDashboard from "./pages/BrandAmbassadorDashboard";
 import BrandAmbassadorLogin from "./pages/BrandAmbassadorLogin";
-import { AuthProvider } from "./lib/auth";
+import { AuthProvider } from "./lib/auth-mysql.tsx";
 import AuthGuard from "./components/auth/AuthGuard";
 import BrandAmbassadorGuard from "./components/auth/BrandAmbassadorGuard";
 import SuperAdminGuard from "./components/auth/SuperAdminGuard";

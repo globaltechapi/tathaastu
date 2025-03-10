@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Gift, Search, Share2, ShoppingCart, CheckCircle } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 
 const steps = [
   {
@@ -38,17 +39,10 @@ const steps = [
 export default function HowItWorksPage() {
   return (
     <div className="bg-background">
-      <div className="relative h-64 bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
-        <div className="container text-center px-6">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-            How It Works
-          </h1>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Creating and sharing your gift registry is simple with our
-            easy-to-use platform.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="How It Works"
+        description="Creating and sharing your gift registry is simple with our easy-to-use platform."
+      />
 
       <div className="container mx-auto py-16 px-6">
         <div className="max-w-3xl mx-auto">
