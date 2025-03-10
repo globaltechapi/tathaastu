@@ -18,6 +18,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   }
 
   if (!user) {
+    // Redirect to login with the current location as the redirect destination
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

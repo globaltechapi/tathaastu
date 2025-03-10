@@ -18,6 +18,7 @@ import {
   User,
   Award,
   BarChart3,
+  LayoutDashboard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +49,7 @@ export default function Header() {
         <nav className="flex items-center gap-6">
           <Link
             to="/"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Home
@@ -58,7 +59,7 @@ export default function Header() {
 
           <Link
             to="/explore"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Explore
@@ -68,7 +69,7 @@ export default function Header() {
 
           <Link
             to="/how-it-works"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               How It Works
@@ -78,7 +79,7 @@ export default function Header() {
 
           <Link
             to="/about"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               About Us
@@ -88,7 +89,7 @@ export default function Header() {
 
           <Link
             to="/contact"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Contact
@@ -98,7 +99,7 @@ export default function Header() {
 
           <Link
             to="/brand-ambassador"
-            className="group flex items-center text-[1.125rem] font-medium relative overflow-hidden py-2"
+            className="group flex items-center text-[0.9rem] font-medium relative overflow-hidden py-2"
           >
             <span className="relative z-10 group-hover:text-primary transition-colors">
               Brand Ambassador
@@ -129,6 +130,15 @@ export default function Header() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 p-2">
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer flex items-center gap-2 py-2"
+                >
+                  <Link to="/dashboard">
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   asChild
                   className="cursor-pointer flex items-center gap-2 py-2"

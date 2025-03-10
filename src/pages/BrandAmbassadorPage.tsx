@@ -327,69 +327,18 @@ export default function BrandAmbassadorPage() {
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-xl p-0 overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                  <div className="bg-gradient-to-br from-primary to-purple-600 p-6 text-white md:w-1/3 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold mb-2">
-                        Join Our Ambassador Program
-                      </h3>
-                      <p className="text-white/80 text-sm mb-6">
-                        Make a real difference in your community
-                      </p>
-
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-center">
-                          <div className="bg-white/20 p-1 rounded-full mr-3">
-                            <CheckCircle className="h-4 w-4" />
-                          </div>
-                          <span className="text-sm">
-                            Premium Ambassador Kit
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="bg-white/20 p-1 rounded-full mr-3">
-                            <CheckCircle className="h-4 w-4" />
-                          </div>
-                          <span className="text-sm">
-                            Campaign Management Tools
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="bg-white/20 p-1 rounded-full mr-3">
-                            <CheckCircle className="h-4 w-4" />
-                          </div>
-                          <span className="text-sm">
-                            Recognition & Certificates
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-auto">
-                      <div className="flex items-center gap-2 bg-white/10 p-3 rounded-lg">
-                        <ShoppingBag className="h-5 w-5" />
-                        <div>
-                          <p className="text-sm font-medium">Free Shipping</p>
-                          <p className="text-xs text-white/70">
-                            Delivered in 7 business days
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:w-2/3">
-                    <DialogHeader className="mb-4">
-                      <DialogTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
+                <div>
+                  <div className="p-6">
+                    <DialogHeader className="mb-2">
+                      <DialogTitle className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
                         Enroll as Brand Ambassador
                       </DialogTitle>
-                      <DialogDescription>
+                      <DialogDescription className="text-sm">
                         Complete your details to join the program for ₹1,999
-                        only
                       </DialogDescription>
                     </DialogHeader>
 
-                    <form onSubmit={handleEnroll} className="space-y-4">
+                    <form onSubmit={handleEnroll} className="space-y-3">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="name" className="text-sm font-medium">
@@ -534,67 +483,82 @@ export default function BrandAmbassadorPage() {
                         </div>
                       </div>
 
-                      <div>
-                        <Label htmlFor="reason" className="text-sm font-medium">
-                          Why do you want to become a Brand Ambassador?
-                        </Label>
-                        <Textarea
-                          id="reason"
-                          name="reason"
-                          value={formData.reason}
-                          onChange={handleInputChange}
-                          className="mt-1 min-h-[80px] border-primary/20 focus-visible:ring-primary/30"
-                          placeholder="Tell us why you're interested in joining our program..."
-                          required
-                        />
+                      <div className="flex gap-3 mt-3">
+                        <Button
+                          variant="outline"
+                          type="button"
+                          onClick={() => setPaymentOpen(false)}
+                          className="w-full"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          type="submit"
+                          disabled={isEnrolling}
+                          className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                        >
+                          {isEnrolling ? (
+                            <span className="flex items-center justify-center">
+                              <svg
+                                className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                              Processing Payment...
+                            </span>
+                          ) : (
+                            <span className="flex items-center justify-center font-medium text-base">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="mr-2"
+                              >
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                              </svg>
+                              Pay ₹1,999 & Enroll Now
+                            </span>
+                          )}
+                        </Button>
                       </div>
 
-                      <Button
-                        type="submit"
-                        disabled={isEnrolling}
-                        className="w-full mt-2 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 py-6"
-                      >
-                        {isEnrolling ? (
-                          <span className="flex items-center justify-center">
-                            <svg
-                              className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            Processing Payment...
-                          </span>
-                        ) : (
-                          <span className="flex items-center justify-center font-medium text-base">
-                            <Award className="mr-2 h-5 w-5" />
-                            Pay ₹1,999 & Enroll Now
-                          </span>
-                        )}
-                      </Button>
-
-                      <p className="text-xs text-center text-muted-foreground pt-2">
+                      <p className="text-xs text-center text-muted-foreground">
                         By enrolling, you agree to our{" "}
-                        <a href="#" className="text-primary hover:underline">
-                          Terms of Service
-                        </a>{" "}
+                        <Link
+                          to="/terms"
+                          className="text-primary hover:underline"
+                        >
+                          Terms
+                        </Link>{" "}
                         and{" "}
-                        <a href="#" className="text-primary hover:underline">
+                        <Link
+                          to="/privacy"
+                          className="text-primary hover:underline"
+                        >
                           Privacy Policy
-                        </a>
+                        </Link>
                       </p>
                     </form>
                   </div>

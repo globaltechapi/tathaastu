@@ -299,9 +299,11 @@ export default function RegistryDashboardPage() {
               Invite Guests
             </Link>
           </Button>
-          <Button variant="outline" size="sm">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Details
+          <Button variant="outline" size="sm" asChild>
+            <Link to={`/registry/${registryData.id}/edit`}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit Details
+            </Link>
           </Button>
           <div className="flex gap-2">
             <Button size="sm" asChild>
@@ -412,7 +414,12 @@ export default function RegistryDashboardPage() {
                           {item.priority} Priority
                         </Badge>
                         {item.purchased && (
-                          <Badge variant="secondary">Purchased</Badge>
+                          <Badge
+                            variant="secondary"
+                            className="font-bold text-green-600 bg-green-100 border-green-200"
+                          >
+                            Purchased
+                          </Badge>
                         )}
                       </div>
                     </div>

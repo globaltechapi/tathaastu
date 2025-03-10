@@ -391,7 +391,12 @@ export default function ViewRegistryPage() {
                     {item.priority} Priority
                   </Badge>
                   {item.purchased && (
-                    <Badge variant="secondary">Reserved</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="font-bold text-green-600 bg-green-100 border-green-200"
+                    >
+                      Reserved
+                    </Badge>
                   )}
                 </div>
               </div>

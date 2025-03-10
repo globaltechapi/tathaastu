@@ -4,7 +4,8 @@ import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import CreateRegistryPage from "./pages/CreateRegistryPage";
 import RegistryDashboardPage from "./pages/RegistryDashboardPage";
-
+import EditRegistryPage from "./pages/EditRegistryPage";
+import DashboardPage from "./pages/DashboardPage";
 import ManualItemPage from "./pages/ManualItemPage";
 import ViewRegistryPage from "./pages/ViewRegistryPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
@@ -38,6 +39,14 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route
+                path="/dashboard"
+                element={
+                  <AuthGuard>
+                    <DashboardPage />
+                  </AuthGuard>
+                }
+              />
+              <Route
                 path="/create-registry"
                 element={
                   <AuthGuard>
@@ -59,6 +68,14 @@ function App() {
                 element={
                   <AuthGuard>
                     <RegistryDashboardPage />
+                  </AuthGuard>
+                }
+              />
+              <Route
+                path="/registry/:id/edit"
+                element={
+                  <AuthGuard>
+                    <EditRegistryPage />
                   </AuthGuard>
                 }
               />
