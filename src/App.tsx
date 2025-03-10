@@ -6,6 +6,7 @@ import CreateRegistryPage from "./pages/CreateRegistryPage";
 import RegistryDashboardPage from "./pages/RegistryDashboardPage";
 import EditRegistryPage from "./pages/EditRegistryPage";
 import DashboardPage from "./pages/DashboardPage";
+import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
 import ManualItemPage from "./pages/ManualItemPage";
 import ViewRegistryPage from "./pages/ViewRegistryPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
@@ -26,6 +27,9 @@ import BrandAmbassadorLogin from "./pages/BrandAmbassadorLogin";
 import { AuthProvider } from "./lib/auth";
 import AuthGuard from "./components/auth/AuthGuard";
 import BrandAmbassadorGuard from "./components/auth/BrandAmbassadorGuard";
+import SuperAdminGuard from "./components/auth/SuperAdminGuard";
+import SuperAdminLoginPage from "./pages/SuperAdminLoginPage";
+import DirectSuperAdminLogin from "./pages/DirectSuperAdminLogin";
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -125,6 +129,17 @@ function App() {
                   <BrandAmbassadorGuard>
                     <BrandAmbassadorDashboard />
                   </BrandAmbassadorGuard>
+                }
+              />
+
+              <Route path="/admin-login" element={<SuperAdminLoginPage />} />
+              <Route path="/direct-admin" element={<DirectSuperAdminLogin />} />
+              <Route
+                path="/admin"
+                element={
+                  <SuperAdminGuard>
+                    <SuperAdminDashboardPage />
+                  </SuperAdminGuard>
                 }
               />
 

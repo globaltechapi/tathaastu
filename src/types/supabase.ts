@@ -271,23 +271,59 @@ export type Database = {
           },
         ]
       }
+      testimonials: {
+        Row: {
+          avatar: string | null
+          content: string
+          created_at: string | null
+          id: string
+          name: string
+          rating: number | null
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          name: string
+          rating?: number | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          rating?: number | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           created_at: string
           email: string
           id: string
+          is_super_admin: boolean | null
           name: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id: string
+          is_super_admin?: boolean | null
           name?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          is_super_admin?: boolean | null
           name?: string | null
         }
         Relationships: []

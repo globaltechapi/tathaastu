@@ -46,6 +46,7 @@ export default function BrandAmbassadorPage() {
   const [checkingStatus, setCheckingStatus] = useState(true);
   const location = useLocation();
   const message = location.state?.message;
+  const [enrollmentPrice, setEnrollmentPrice] = useState(1999);
 
   const [formData, setFormData] = useState({
     name: user?.user_metadata?.name || "",
@@ -92,6 +93,24 @@ export default function BrandAmbassadorPage() {
     }
   }, [message, toast]);
 
+  // Load payment settings from localStorage if available
+  useEffect(() => {
+    const savedSettings = localStorage.getItem("siteSettings");
+    if (savedSettings) {
+      try {
+        const settings = JSON.parse(savedSettings);
+        if (
+          settings.paymentSettings &&
+          settings.paymentSettings.ambassadorPrice
+        ) {
+          setEnrollmentPrice(settings.paymentSettings.ambassadorPrice);
+        }
+      } catch (e) {
+        console.error("Error parsing saved settings:", e);
+      }
+    }
+  }, []);
+
   // If user is already an ambassador, redirect to dashboard
   useEffect(() => {
     if (isAmbassador) {
@@ -130,7 +149,7 @@ export default function BrandAmbassadorPage() {
     // Initialize Razorpay payment
     const options = {
       key: "rzp_test_1DP5mmOlF5G5ag", // Razorpay test key
-      amount: 199900, // Amount in paise (₹1,999)
+      amount: enrollmentPrice * 100, // Amount in paise (₹1,999)
       currency: "INR",
       name: "Tathaastu",
       description: "Brand Ambassador Program Enrollment",
@@ -323,7 +342,9 @@ export default function BrandAmbassadorPage() {
                   className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
                   disabled={isAmbassador || checkingStatus}
                 >
-                  {isEnrolling ? "Processing..." : "Enroll Now for ₹1,999"}
+                  {isEnrolling
+                    ? "Processing..."
+                    : `Enroll Now for ₹${enrollmentPrice.toLocaleString()}`}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-xl p-0 overflow-hidden">
@@ -334,7 +355,8 @@ export default function BrandAmbassadorPage() {
                         Enroll as Brand Ambassador
                       </DialogTitle>
                       <DialogDescription className="text-sm">
-                        Complete your details to join the program for ₹1,999
+                        Complete your details to join the program for ₹
+                        {enrollmentPrice.toLocaleString()}
                       </DialogDescription>
                     </DialogHeader>
 
@@ -538,7 +560,8 @@ export default function BrandAmbassadorPage() {
                                 <circle cx="12" cy="8" r="7"></circle>
                                 <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
                               </svg>
-                              Pay ₹1,999 & Enroll Now
+                              Pay ₹{enrollmentPrice.toLocaleString()} & Enroll
+                              Now
                             </span>
                           )}
                         </Button>
@@ -708,7 +731,8 @@ export default function BrandAmbassadorPage() {
                 Enroll in the Program
               </h3>
               <p className="text-muted-foreground mb-4">
-                Complete the enrollment form and pay the one-time fee of ₹1,999
+                Complete the enrollment form and pay the one-time fee of ₹
+                {enrollmentPrice.toLocaleString()}
                 to join the program.
               </p>
               {isAmbassador ? (
@@ -928,7 +952,7 @@ export default function BrandAmbassadorPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">
-                    What does the ₹1,999 fee cover?
+                    What does the ₹{enrollmentPrice.toLocaleString()} fee cover?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1005,7 +1029,7 @@ export default function BrandAmbassadorPage() {
                   disabled={checkingStatus}
                 >
                   <CheckCircle className="mr-2 h-5 w-5" />
-                  Enroll Now for ₹1,999
+                  Enroll Now for ₹{enrollmentPrice.toLocaleString()}
                 </Button>
               )}
               {!user ? (

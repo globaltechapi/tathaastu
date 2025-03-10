@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Facebook,
@@ -12,6 +13,80 @@ import {
 
 export default function Footer() {
   const navigate = useNavigate();
+  const [footerText, setFooterText] = useState(
+    "© 2024 Tathaastu. All rights reserved.",
+  );
+
+  // State for contact information
+  const [contactEmail, setContactEmail] = useState("info@tathaastu.org");
+  const [contactPhone, setContactPhone] = useState("+91 98765 43210");
+  const [contactAddress, setContactAddress] = useState(
+    "91 Springboard, Koramangala, Bengaluru, Karnataka 560034, India",
+  );
+  const [socialLinks, setSocialLinks] = useState({
+    twitter: "https://twitter.com",
+    instagram: "https://instagram.com",
+    facebook: "https://facebook.com",
+    linkedin: "https://linkedin.com",
+  });
+
+  // Listen for changes to the footer settings in localStorage
+  useEffect(() => {
+    // Initial load from localStorage
+    const loadFooterSettings = () => {
+      try {
+        const savedSettings = localStorage.getItem("siteSettings");
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+
+          // Update all footer-related settings
+          if (settings.footerText) {
+            setFooterText(settings.footerText);
+          }
+
+          if (settings.contactEmail) {
+            setContactEmail(settings.contactEmail);
+          }
+
+          if (settings.contactPhone) {
+            setContactPhone(settings.contactPhone);
+          }
+
+          if (settings.contactAddress) {
+            setContactAddress(settings.contactAddress);
+          }
+
+          if (settings.socialLinks) {
+            setSocialLinks({
+              twitter: settings.socialLinks.twitter || "https://twitter.com",
+              instagram:
+                settings.socialLinks.instagram || "https://instagram.com",
+              facebook: settings.socialLinks.facebook || "https://facebook.com",
+              linkedin: settings.socialLinks.linkedin || "https://linkedin.com",
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Error loading footer settings:", e);
+      }
+    };
+
+    // Load initially
+    loadFooterSettings();
+
+    // Set up storage event listener to update when changed in another tab/window or by admin panel
+    const handleStorageChange = (e) => {
+      if (e.key === "siteSettings") {
+        loadFooterSettings();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -42,7 +117,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mb-6">
               <a
-                href="https://twitter.com"
+                href={socialLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
@@ -51,7 +126,7 @@ export default function Footer() {
                 <Twitter className="h-4 w-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href={socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
@@ -60,7 +135,7 @@ export default function Footer() {
                 <Instagram className="h-4 w-4" />
               </a>
               <a
-                href="https://facebook.com"
+                href={socialLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
@@ -165,20 +240,19 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <span className="text-sm text-muted-foreground">
-                  91 Springboard, Koramangala, Bengaluru, Karnataka 560034,
-                  India
+                  {contactAddress}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                  +91 98765 43210
+                  {contactPhone}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                  info@tathaastu.org
+                  {contactEmail}
                 </span>
               </li>
             </ul>
@@ -186,9 +260,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Tathaastu. All rights reserved.
-          </p>
+          <p className="text-sm text-muted-foreground">{footerText}</p>
           <div className="flex items-center text-sm text-muted-foreground">
             <span className="flex items-center">
               Made with <Heart className="h-3 w-3 text-red-500 mx-1" /> in India
